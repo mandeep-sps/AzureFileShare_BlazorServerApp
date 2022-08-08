@@ -1,0 +1,46 @@
+﻿@page "/AzureProvider"
+@using Syncfusion.Blazor.FileManager
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.PdfViewer
+@using Syncfusion.Blazor.PdfViewerServer
+@using Newtonsoft.Json
+<div class="control-section">
+
+    <SfFileManager AllowDragAndDrop="true" ID="filemanager" @ref="file" TValue="FileManagerDirectoryContent">
+        <FileManagerEvents TValue="FileManagerDirectoryContent" OnFileOpen="fileOpen"></FileManagerEvents>
+        <FileManagerAjaxSettings Url="/api/SyncfusionAzureFileProvider/AzureFileOperations"
+                                 DownloadUrl="/api/SyncfusionAzureFileProvider/AzureDownload"
+                                 UploadUrl="/api/SyncfusionAzureFileProvider/Upload"
+                                 GetImageUrl="/api/SyncfusionAzureFileProvider/GetImage">
+        </FileManagerAjaxSettings>
+        <FileManagerUploadSettings AllowedExtensions=".pdf,.docx"></FileManagerUploadSettings> 
+        <FileManagerContextMenuSettings File="@Items" Folder="@Items"></FileManagerContextMenuSettings>
+        <FileManagerToolbarSettings Items="@Items"></FileManagerToolbarSettings>
+    </SfFileManager>
+
+    <SfDialog @ref="dialog" Width="1200px" ShowCloseIcon="true" IsModal="true" Visible="false" Header="PDF  Viewer">
+        <DialogTemplates>
+            <Content>
+                <SfPdfViewerServer DocumentPath="@DocumentPath" Width="1180px" Height="500px" />
+            </Content>
+        </DialogTemplates>
+    </SfDialog>
+
+</div>
+@code {
+    public string[] Items = new string[] { "Open", "|", "Upload", "NewFolder", "SortBy", "View", "Copy", "Refresh", "Download", "Cut", "Delete", "Details", "Paste" };
+    public string[] Toolbar_Items = new string[] { "NewFolder", "Open", "|", "Upload", "Refresh", "Copy", "Download", "Delete", "Details", "Paste" };
+
+    SfFileManager<FileManagerDirectoryContent> file;
+    private string DocumentPath { get; set; } 
+    SfPdfViewerServer PdfViewer;
+    SfDialog dialog;
+    public async Task fileOpen(Syncfusion.Blazor.FileManager.FileOpenEventArgs<FileManagerDirectoryContent> args)
+    {
+        //if ((args.FileDetails.IsFile == true) && args.FileDetails.Type == ".pdf")
+        //{
+        //    await dialog.ShowAsync();
+        //    DocumentPath = "CloudFiles" + args.FileDetails.FilterPath + args.FileDetails.Name;
+        //}
+    }
+}
